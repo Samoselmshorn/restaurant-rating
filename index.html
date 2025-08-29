@@ -40,25 +40,19 @@
     }
 
     .stars span {
+      transition: color 0.3s, transform 0.3s;
       display: inline-block;
-      transition: transform 0.2s, color 0.3s;
     }
 
     .stars span:hover {
-      transform: scale(1.2);
+      transform: scale(1.4);
     }
 
-    .stars span.active {
+    .active {
       color: #FFD700;
-      animation: popStar 0.3s ease forwards;
     }
 
-    @keyframes popStar {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.5); }
-      100% { transform: scale(1); }
-    }
-
+    /* Модальное окно */
     #feedbackModal {
       display: none;
       position: fixed;
@@ -135,9 +129,27 @@
       to {transform: translateY(0); opacity: 1;}
     }
 
+    /* Мобильные стили */
     @media (max-width: 480px) {
-      .container { padding: 25px; }
-      .stars { font-size: 40px; }
+      .container {
+        padding: 30px;
+        max-width: 95%;
+        margin-top: 50px; /* поднимаем контейнер выше */
+      }
+      .stars {
+        font-size: 50px;
+        margin-bottom: 20px;
+      }
+      h2 {
+        font-size: 20px;
+      }
+      p {
+        font-size: 16px;
+      }
+      .modal-content {
+        width: 90%;
+        max-width: 350px;
+      }
     }
   </style>
 </head>
@@ -148,6 +160,7 @@
     <p>Ihre Meinung ist uns wichtig</p>
   </div>
 
+  <!-- Модальное окно -->
   <div id="feedbackModal">
     <div class="modal-content">
       <button class="close-btn" onclick="closeModal()">✖</button>
@@ -157,6 +170,7 @@
     </div>
   </div>
 
+  <!-- EmailJS -->
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script>
     (function(){
@@ -178,30 +192,20 @@
     function rate(value) {
       selectedRating = value;
       const spans = starContainer.querySelectorAll("span");
+      spans.forEach((s, idx) => s.classList.toggle("active", idx < value));
 
-      spans.forEach((s, idx) => {
-        if(idx < value){
-          s.classList.add("active");
-          s.style.animation = 'none';
-          s.offsetHeight; // сброс анимации
-          s.style.animation = `popStar 0.3s ease ${idx*0.1}s forwards`;
-        } else {
-          s.classList.remove("active");
-        }
-      });
-
+      // Отключаем повторное голосование
       spans.forEach(s => s.onclick = null);
 
       if (value < 5) {
         document.getElementById("feedbackModal").style.display = "flex";
       } else {
-        window.open("https://www.google.com/maps/place/Restaurant+Samos/@53.7476822,9.644683,15.25z/data=!4m8!3m7!1s0x47b3d6805006d645:0xbbe7ccbcf06934ff!8m2!3d53.7423686!4d9.6440595!9m1!1b1!16s%2Fg%2F1tczjjw3?entry=ttu&g_ep=EgoyMDI1MDgyNS4wIKXMDSoASAFQAw%3D%3D","_blank");
+        window.open("https://www.google.com/maps/place/Restaurant+Samos/", "_blank");
       }
     }
 
     function closeModal() {
       document.getElementById("feedbackModal").style.display = "none";
-      document.getElementById("feedbackText").value = "";
     }
 
     function sendFeedback() {
@@ -212,6 +216,7 @@
       }).then(() => {
         alert("Danke für Ihr Feedback! Wir haben es erhalten.");
         closeModal();
+        document.getElementById("feedbackText").value = "";
       }).catch(err => {
         alert("Fehler beim Senden: " + JSON.stringify(err));
       });
