@@ -11,38 +11,37 @@
       margin: 0;
       padding: 0;
       background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
+      min-height: 100vh;
     }
 
     .container {
       background: white;
-      padding: 8vw;
+      padding: 30px;
       border-radius: 15px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.1);
       text-align: center;
-      max-width: 90vw;
-      width: 100%;
+      max-width: 400px;
+      width: 90%;
       animation: fadeIn 0.8s ease;
     }
 
     h2 {
-      margin-bottom: 3vw;
-      font-size: 5vw;
+      margin-bottom: 20px;
       color: #333;
     }
 
     .stars {
-      font-size: 10vw;
+      font-size: 55px;
       cursor: pointer;
       color: #ccc;
-      margin-bottom: 5vw;
+      margin-bottom: 25px;
     }
 
     .stars span {
-      transition: color 0.3s, transform 0.3s;
+      transition: color 0.3s, transform 0.2s;
       display: inline-block;
     }
 
@@ -52,11 +51,6 @@
 
     .active {
       color: #FFD700;
-    }
-
-    p {
-      font-size: 4vw;
-      margin: 0;
     }
 
     /* Модальное окно */
@@ -72,10 +66,10 @@
 
     .modal-content {
       background: white;
-      padding: 5vw;
+      padding: 25px;
       border-radius: 12px;
       width: 90%;
-      max-width: 400px;
+      max-width: 320px;
       text-align: center;
       box-shadow: 0 5px 15px rgba(0,0,0,0.3);
       animation: slideUp 0.5s ease;
@@ -83,44 +77,42 @@
     }
 
     .modal-content h3 {
-      margin-bottom: 3vw;
+      margin-bottom: 10px;
       font-weight: 600;
-      font-size: 5vw;
     }
 
     .close-btn {
       position: absolute;
-      top: 2vw;
-      right: 2vw;
+      top: 8px;
+      right: 8px;
       cursor: pointer;
       font-weight: 600;
-      font-size: 6vw;
+      font-size: 18px;
       background: transparent;
       border: none;
     }
 
     textarea {
       width: 100%;
-      height: 20vw;
-      margin-top: 2vw;
-      padding: 2vw;
+      height: 90px;
+      margin-top: 10px;
+      padding: 10px;
       border: 1px solid #ccc;
       border-radius: 8px;
       font-family: inherit;
       resize: none;
       box-sizing: border-box;
-      font-size: 4vw;
     }
 
     button {
-      margin-top: 3vw;
-      padding: 2vw 4vw;
+      margin-top: 15px;
+      padding: 10px 18px;
       border: none;
       background: #FFD700;
       cursor: pointer;
       border-radius: 8px;
       font-weight: 600;
-      font-size: 4.5vw;
+      font-size: 15px;
       transition: background 0.3s;
     }
 
@@ -137,6 +129,11 @@
       from {transform: translateY(50px); opacity: 0;}
       to {transform: translateY(0); opacity: 1;}
     }
+
+    @media (max-width: 480px) {
+      .stars { font-size: 45px; }
+      .container { padding: 25px; }
+    }
   </style>
 </head>
 <body>
@@ -146,7 +143,6 @@
     <p>Ihre Meinung ist uns wichtig</p>
   </div>
 
-  <!-- Модальное окно -->
   <div id="feedbackModal">
     <div class="modal-content">
       <button class="close-btn" onclick="closeModal()">✖</button>
@@ -156,12 +152,9 @@
     </div>
   </div>
 
-  <!-- EmailJS -->
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script>
-    (function(){
-      emailjs.init("CJUq7ceqSdJ45pUwD");
-    })();
+    emailjs.init("CJUq7ceqSdJ45pUwD");
 
     const starContainer = document.getElementById("starContainer");
     const stars = starContainer.innerText.trim().split(" ");
@@ -184,12 +177,14 @@
       if (value < 5) {
         document.getElementById("feedbackModal").style.display = "flex";
       } else {
-        window.open("https://maps.app.goo.gl/HB4gik2gwUShjMZ27");
+        // Пятая звезда открывает ссылку на конкретный ресторан
+        window.open("https://www.google.com/maps/place/Restaurant+Samos/@53.7467857,9.6443468,14.5z/data=!4m6!3m5!1s0x47b3d6805006d645:0xbbe7ccbcf06934ff!8m2!3d53.7423686!4d9.6440595!16s%2Fg%2F1tczjjw3?entry=ttu&g_ep=EgoyMDI1MDgyNS4wIKXMDSoASAFQAw%3D%3D", "_blank");
       }
     }
 
     function closeModal() {
       document.getElementById("feedbackModal").style.display = "none";
+      document.getElementById("feedbackText").value = "";
     }
 
     function sendFeedback() {
@@ -200,7 +195,6 @@
       }).then(() => {
         alert("Danke für Ihr Feedback! Wir haben es erhalten.");
         closeModal();
-        document.getElementById("feedbackText").value = "";
       }).catch(err => {
         alert("Fehler beim Senden: " + JSON.stringify(err));
       });
@@ -208,5 +202,3 @@
   </script>
 </body>
 </html>
-
-
